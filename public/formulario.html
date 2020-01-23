@@ -3,38 +3,71 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Formulario HTML</title>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+		<style>
+			
+			.contenedor{
+				position: absolute;
+				height: 100%;
+				width: 100% !important;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				margin: 0px !important;
+			}
+			
+		</style>
 	</head>
 	<body>
-		<h1>Formulario HTML</h1>
-		<form action="http://localhost/enviar" method="post">
 
-			<label for="nombre">Ingrese su nombre:</label>
-			<input type="text" name="nombre" placeholder="Ej: Obi Juan Kenobi">
+		<div  class="contenedor text-white">
 			
-			<br>
+			<form action="http://localhost:8080/enviar" method="post" style="background:#0062cc; padding:20px;border-radius:10px;width: 400px;">
+				<h1>Formulario HTML</h1>
 
-			<label for="correo">Ingrese su E-Mail:</label>
-			<input type="email" name="correo" placeholder="Ej: obi.juan@jedi.com">
+				<div class="error"></div>
 
-			<br>
+				<div class="form-group">
+					<label for="nombre">Ingrese su nombre:</label>
+					<input type="text" name="nombre" class="form-control" placeholder="Ej: Obi Juan Kenobi">
+				</div>
 
-			<label for="asunto">Elija su asunto:</label>
-			<select name="asunto">
-				<option value="ax45">Consulta</option>
-				<option value="ax38">Pedido</option>
-				<option value="ax67">Sugerencia</option>
-				<option value="ax14">Reclamo</option>
-			</select>
+				<div class="form-group">
+					<label for="correo">Ingrese su E-Mail:</label>
+					<input type="email" name="correo" class="form-control" placeholder="Ej: obi.juan@jedi.com">
+				</div>
 
-			<br>
+				<div class="form-group">
+					<label for="asunto">Elija su asunto:</label>
+					<select class="form-control" name="asunto">
+						<option value="ax45">Consulta</option>
+						<option value="ax38">Pedido</option>
+						<option value="ax67">Sugerencia</option>
+						<option value="ax14">Reclamo</option>
+					</select>
+				</div>
 
-			<label for="mensaje">Ingrese su mensaje:</label>
-			<textarea name="mensaje" cols="30" rows="10" placeholder="Max: 100 caracteres"></textarea>
+				<div class="form-group">
+					<label for="mensaje">Ingrese su mensaje:</label>
+					<textarea class="w-100" name="mensaje" rows="5" placeholder="Max: 100 caracteres"></textarea>
+				</div>
 
-			<br>
+				<button type="submit" class="btn btn-primary btn-md" value="Done!">Enviar</button>
+			</form>
+		</div>
 
-			<input type="submit" value="Done!">
 
-		</form>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+	<script>
+		
+	
+	</script>
 	</body>
 </html>
