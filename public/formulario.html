@@ -55,7 +55,7 @@
 					<textarea class="w-100" name="mensaje" rows="5" placeholder="Max: 100 caracteres"></textarea>
 				</div>
 
-				<button type="submit" class="btn btn-primary btn-md" value="Done!">Enviar</button>
+				<input type="submit" class="btn btn-primary btn-md" value="Enviar">
 			</form>
 		</div>
 
@@ -66,7 +66,12 @@
 
 
 	<script>
+		const formulario = document.querySelector("form")
 		
+		formulario.onsubmit = function(evento){
+			evento.preventDefault()
+			alert("enviar datos")
+		}
 	
 	</script>
 	</body>
