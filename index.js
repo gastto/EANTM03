@@ -14,14 +14,14 @@ const miniOutlook = nodemailer.createTransport({
     }
 })
 // 2 - Verificar conexión con el servidor de email
-// miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
-// 	if(error){
-// 		console.log("Error:")
-// 		console.log(error.response)
-// 	}else{
-// 		console.log("Recibido")
-// 	}
-// })
+miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
+	if(error){
+		console.log("Error:")
+		console.log(error.response)
+	}else{
+		console.log("Recibido")
+	}
+})
 // Fin Config nodemailer
 
 const server = express()
@@ -47,47 +47,61 @@ server.get("/", function(req, res){
 })
 
 
-server.post("/enviar", [
-	check('nombre')
-	.not().isEmpty()
-	.isLength({ min: 5 })
-	.withMessage('el nombre debe contener 5 caracteres como minimo'),
-	check('correo')
-	.not().isEmpty()
-	.isEmail()
-	.isLength({ min: 5 }),
-], (request, response) => {
+server.post("/enviar", (request, response) => {
 
 	let datos = {
 		rta: "ok",
 		consulta: request.body
 	}
 
-	const errors = validationResult(request);
+	// const errors = validationResult(request);
 
-	if(!errors.isEmpty()){
-		const error = document.querySelector('.error')
-		return response.status(422).json({
-			errors: errors.array()
-		});
-	}
+	// if(!errors.isEmpty()){
+	// 	const error = document.querySelector('.error')
+	// 	return response.status(422).json({
+	// 		errors: errors.array()
+	// 	});
+	// }
 
-	response.status(202).json({
-		succes: 'ok',
-		datos: request.body
-	})
+	// response.status(202).json({
+	// 	succes: 'ok',
+	// 	datos: request.body
+	// })
 
 	// tarea 1: validar que no esten vacios los campos antes de enviar el mail
 	// tarea 2: definir un mensaje si sale bien o si sale mal.
 	// bootstrap
-	
+	if( datos.consulta.nombre == "" ){
+		response.json({
+			rta: "Error",
+			msg: "El nombre no puede quedar vacio"
+		})
+	}else if(datos.consulta.correo == "" || datos.consulta.correo.indexOf("@") == -1 ) {
+		response.json({
+			rta: "error",
+			mgs: "Ingrese un correo valido..."
+		})
+	}else if( datos.consulta.asunto == "" ){
+		response.json({
+			rta: "error",
+			mgs: "Elija un asunto"
+		})
+	}else if( datos.consulta.mensaje.length < 50 || datos.consulta.mensaje.length > 200 ){
+		response.json({
+			rta: "error",
+			mgs: "Ingrese un mensaje entre 50 y 200 caracteres"
+		})
+	}else {
+
 	// Envio de mail
-	// miniOutlook.sendMail({
-	// 	from: datos.consulta.correo,
-	// 	to: "harvey.mante@ethereal.email",
-	// 	subject: datos.consulta.asunto,
-	// 	html: "<strong>" + datos.consulta.mensaje + "</strong>"
-	// })
+	miniOutlook.sendMail({
+		from: datos.consulta.correo,
+		to: "harvey.mante@ethereal.email",
+		subject: datos.consulta.asunto,
+		html: "<strong>" + datos.consulta.mensaje + "</strong>"
+	})
 
 	response.json(datos)
+	}
+	
 })
