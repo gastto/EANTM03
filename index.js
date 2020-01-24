@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const nodemailer = require("nodemailer")
 const { check, validationResult } = require('express-validator');
+const multer = require("multer")
 
 // Inicio Config nodemailer
 // 1 - Configurar los datos del servidor de email
@@ -34,11 +35,13 @@ const json = bodyParser.json()
 
 const urlencoded = bodyParser.urlencoded({ extended: false })
 
+const upload = multer()
+
 /* Buscar archivos estáticos en el directorio /public */
 server.use( public )
 server.use( json )
 server.use( urlencoded )
-
+server.use(upload.array())
 server.listen( port )
 
 // Ejecutar endpoints customizados
@@ -70,18 +73,22 @@ server.post("/enviar", (request, response) => {
 
 	// tarea 1: validar que no esten vacios los campos antes de enviar el mail
 	// tarea 2: definir un mensaje si sale bien o si sale mal.
-	// bootstrap
-	if( datos.consulta.nombre == "" ){
+	// bootstrapu
+
+	// implementar el modulo joi
+	// url https://github.com/hapijs/joi
+
+	if( datos.consulta.nombre == "" || datos.consulta.nombre == null ){
 		response.json({
 			rta: "Error",
 			msg: "El nombre no puede quedar vacio"
 		})
-	}else if(datos.consulta.correo == "" || datos.consulta.correo.indexOf("@") == -1 ) {
+	}else if(datos.consulta.correo == null || datos.consulta.correo.indexOf("@") == -1 ) {
 		response.json({
 			rta: "error",
 			mgs: "Ingrese un correo valido..."
 		})
-	}else if( datos.consulta.asunto == "" ){
+	}else if( datos.consulta.asunto == null ){
 		response.json({
 			rta: "error",
 			mgs: "Elija un asunto"
@@ -103,5 +110,5 @@ server.post("/enviar", (request, response) => {
 
 	response.json(datos)
 	}
-	
+
 })
