@@ -58,23 +58,66 @@ server.post("/enviar", (request, response) => {
 	}
 	
 
-	const schema = Joi.object().keys({
+	const schema = Joi.object({
 		nombre: Joi.string()
-        .alphanum()
         .min(3)
 		.max(30)
-		.required(),
-
+		.required()
 	});
+	
 
-	schema.validate(request.body, schema,(err, result) => {
+	const validator = schema.validate(request.body, (err, value) => {
+
 		if(err){
 			console.log(err)
-			response.send("error")
+		}else{
+			console.log(value)
+			response.send(value)
 		}
-		console.log(result)
-		response.send('recibido')
 	});
+	response.send(validator)
+
+	
+
+
+
+	// 	schema.validate(request.body, (err, value) => {
+
+
+    //     if (err) {
+	// 		console.log(err)
+    //         // send a 422 error response if validation fails
+    //         response.status(422).json({
+    //             status: 'error',
+    //             message: 'Invalid request data',
+    //             data: data
+    //         });
+    //     } else {
+	// 		console.log(value)
+    //         // send a success response if validation passes
+    //         // attach the random ID to the data response
+    //         response.json({
+    //             status: 'success',
+    //             message: 'User created successfully',
+    //             data: Object.assign(datos)
+    //         });
+    //     }
+
+    // });
+
+	// try {
+	// 	const value = await schema.validateAsync({ datos });
+	// }
+	// catch (err) { "error" }
+
+	// Joi.validate(request.body, schema,(err, result) => {	
+	// 	if(err){
+	// 		console.log(err)
+	// 		response.send("error")
+	// 	}
+	// 	console.log(result)
+	// 	response.send('recibido')
+	// });
 
 	// const result = Joi.validate(datos, schema); 
 	// const { value, error } = result; 
