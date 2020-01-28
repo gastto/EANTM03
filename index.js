@@ -14,15 +14,15 @@ const Joi = require("@hapi/joi")
 			pass: 'r57ND7BZV9NxmgFnem'
 		}
 	})
-	// 2 - Verificar conexión con el servidor de email
-	miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
-		if(error){
-			console.log("Error:")
-			console.log(error.response)
-		}else{
-			console.log("Recibido")
-		}
-	})
+// 2 - Verificar conexión con el servidor de email
+	// miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
+	// 	if(error){
+	// 		console.log("Error:")
+	// 		console.log(error.response)
+	// 	}else{
+	// 		console.log("Recibido")
+	// 	}
+	// })
 // Fin Config nodemailer
 
 const server = express()
@@ -49,37 +49,57 @@ server.get("/", function(req, res){
 	res.end("<a type='button' href='/formulario.html'>ir a formulario</a>")
 })
 
-
 server.post("/enviar", (request, response) => {
 
 	let datos = {
 		rta: "ok",
 		consulta: request.body
 	}
-	
 
-	const schema = Joi.object({
+	const schema = Joi.object().keys({
 		nombre: Joi.string()
         .min(3)
 		.max(30)
 		.required()
 	});
-	
 
-	const validator = schema.validate(request.body, (err, value) => {
+		
+		const { err, value } = schema.validate({ nombre: 's' })
+		response.send(value)
+		if (err) {
+            // send a 422 error response if validation fails
+            response.status(422).json({
+                status: 'error',
+                msg: 'Invalid request data',
+                datos: value
+            });
+        } else {
+            // send a success response if validation passes
+			// attach the random ID to the data response
+            response.json({
+				status: 'success',
+                msg: 'User created successfully',
+                datos: value
+            });
+        }
 
-		if(err){
-			console.log(err)
-		}else{
-			console.log(value)
-			response.send(value)
-		}
-	});
-	response.send(validator)
-
-	
 
 
+	// try {
+	// 	const value = await schema.validateAsync(request.body);
+	// 	console.log(value)
+	// 	response.json({message: datos
+		
+	// 	})
+	// }
+	// catch (err) {
+	// 	console.log(err)
+	//  }
+
+	// const result = schema.validate(request.body)
+	// if (result.error) {
+	//   return res.status(400).json({ error: result.error });
+	// }
 
 	// 	schema.validate(request.body, (err, value) => {
 
@@ -130,7 +150,7 @@ server.post("/enviar", (request, response) => {
 	// } else { 
 	// 	res.json({ msg: 'ssss' });
 	// } 
-});
+
 
 	// Joi.validate(request.body, schema, (err,result) => {
 	// 	if(err){
@@ -144,11 +164,21 @@ server.post("/enviar", (request, response) => {
 
 
 
+
+
 	// if( datos.consulta.nombre == "" || datos.consulta.nombre == null ){
 	// 	response.json({
 	// 		rta: "Error",
 	// 		msg: "El nombre no puede quedar vacio"
 	// 	})
+	// }else{
+	// 	response.json(datos)
+	// }
+
+
+
+
+
 	// }else if(datos.consulta.correo == null || datos.consulta.correo.indexOf("@") == -1 ) {
 	// 	response.json({
 	// 		rta: "error",
@@ -177,3 +207,4 @@ server.post("/enviar", (request, response) => {
 	// response.json(datos)
 	// }
 
+});

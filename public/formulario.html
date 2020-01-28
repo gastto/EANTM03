@@ -28,13 +28,16 @@
 			<form action="http://localhost:8080/enviar" method="post" style="background:#0062cc; padding:20px;border-radius:10px;width: 400px;">
 				<h1>Formulario HTML</h1>
 
-				<div class="error"></div>
+				
 
 				<div class="form-group">
 					<label for="nombre">Ingrese su nombre:</label>
 					<input type="text" name="nombre" class="form-control" placeholder="Ej: Obi Juan Kenobi">
 				</div>
 
+				<div class="error"></div>
+				<br>
+				
 				<div class="form-group">
 					<label for="correo">Ingrese su E-Mail:</label>
 					<input type="email" name="correo" class="form-control" placeholder="Ej: obi.juan@jedi.com">
@@ -77,7 +80,10 @@
 			} ).then(function(response){
 				return response.json()
 			}).then(function(server){
-				console.log(server.response)
+				// alert(server.status)
+				console.log(server)
+				const error = document.querySelector(".error")
+				error.innerHTML = server.status
 			})
 		}
 	
