@@ -3,6 +3,7 @@ const bodyParser = require("body-parser")
 const nodemailer = require("nodemailer")
 const multer = require("multer")
 const Joi = require("@hapi/joi")
+const hbs = require("nodemailer-express-handlebars")
 
 // Inicio Config nodemailer
 // 1 - Configurar los datos del servidor de email
@@ -15,14 +16,28 @@ const Joi = require("@hapi/joi")
 		}
 	})
 // 2 - Verificar conexión con el servidor de email
-	// miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
-	// 	if(error){
-	// 		console.log("Error:")
-	// 		console.log(error.response)
-	// 	}else{
-	// 		console.log("Recibido")
-	// 	}
-	// })
+	miniOutlook.verify(function(error,ok){ // callback: hacer tal cosa
+		if(error){
+			console.log("Error:")
+			console.log(error.response)
+		}else{
+			console.log("Recibido")
+		}
+	})
+
+// 3 - Asignar motor de plantilla y Conectar con handlebars
+const render = {
+	viewEngine: {
+		layoutDir: "templates/",
+		partialDir: "templates/",
+		defaultLayout: false,
+		extName: ".hbs"
+	},
+	viewPath: "templates/",
+	extName: ".hbs"
+}
+miniOutlook.use('compile', hbs(render));
+
 // Fin Config nodemailer
 
 const server = express()
@@ -56,32 +71,65 @@ server.post("/enviar", (request, response) => {
 		consulta: request.body
 	}
 
-	const schema = Joi.object().keys({
-		nombre: Joi.string()
-        .min(3)
-		.max(30)
-		.required()
+	const schema = Joi.object({
+		nombre: Joi.string().min(3).max(30).required(),
+		correo: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'org'] } }).required(),
+		asunto: Joi.string().alphanum().valid('ax45','ax38','ax67','ax14').required(),
+		mensaje: Joi.string().min(50).max(200).required(),
+		fecha: Joi.date().timestamp('unix')
 	});
 
-		
-		const { err, value } = schema.validate({ nombre: 's' })
-		response.send(value)
-		if (err) {
-            // send a 422 error response if validation fails
-            response.status(422).json({
-                status: 'error',
-                msg: 'Invalid request data',
-                datos: value
-            });
-        } else {
-            // send a success response if validation passes
-			// attach the random ID to the data response
-            response.json({
-				status: 'success',
-                msg: 'User created successfully',
-                datos: value
-            });
-        }
+	let validacion = schema.validate(datos.consulta)
+
+	if( validacion.error ){
+		response.json( validacion.error )
+	}else{
+		// Envio de mail
+		miniOutlook.sendMail({
+			from: datos.consulta.correo,
+			to: "harvey.mante@ethereal.email",
+			subject: datos.consulta.asunto,
+			//html: "<strong>" + datos.consulta.mensaje + "</strong>"
+			template: "prueba",
+			context: datos.consulta
+		}, function(error, info){
+
+			let msg = error ? 'Su consulta no pudo ser enviada' : 'Gracias por su consulta'
+
+			response.json({ msg })
+		})
+
+	}
+
+
+	// implementar el sistema de plantillas handlebars + envío de email
+	//url: nodemailer-express-handlebar
+
+
+
+
+
+
+
+
+		// const { err, value } = schema.validate(datos.consulta)
+		// response.send(value)
+		// if (err) {
+        //     // send a 422 error response if validation fails
+        //     response.status(422).json({
+        //         status: 'error',
+        //         msg: 'Invalid request data',
+        //         datos: value
+        //     });
+        // } else {
+        //     // send a success response if validation passes
+		// 	// attach the random ID to the data response
+        //     response.json({
+		// 		status: 'success',
+        //         msg: 'User created successfully',
+        //         datos: value
+        //     });
+        // }
 
 
 

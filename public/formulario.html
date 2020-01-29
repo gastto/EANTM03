@@ -71,7 +71,7 @@
 			let ahora = new Date()
 			let datos = new FormData(this)
 
-			datos.append("fecha", ahora.toString())
+			datos.append("fecha", ahora.valueOf())
 
 			// Enviar datos asincronicamente
 			fetch( this.action, {
@@ -81,9 +81,11 @@
 				return response.json()
 			}).then(function(server){
 				// alert(server.status)
+				console.clear()
 				console.log(server)
-				const error = document.querySelector(".error")
-				error.innerHTML = server.status
+				alert(server.msg)
+				// const error = document.querySelector(".error")
+				// error.innerHTML = server.status
 			})
 		}
 	
