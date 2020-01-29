@@ -3,9 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Formulario HTML</title>
-
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
 		<style>
 			
 			.contenedor{
@@ -23,24 +21,20 @@
 	</head>
 	<body>
 
-		<div  class="contenedor text-white">
-			
+		<div class="contenedor text-white">
 			<form action="http://localhost:8080/enviar" method="post" style="background:#0062cc; padding:20px;border-radius:10px;width: 400px;">
 				<h1>Formulario HTML</h1>
-
-				
 
 				<div class="form-group">
 					<label for="nombre">Ingrese su nombre:</label>
 					<input type="text" name="nombre" class="form-control" placeholder="Ej: Obi Juan Kenobi">
+					<div class="errorNombre" style="display:none"></div>
 				</div>
 
-				<div class="error"></div>
-				<br>
-				
 				<div class="form-group">
 					<label for="correo">Ingrese su E-Mail:</label>
 					<input type="email" name="correo" class="form-control" placeholder="Ej: obi.juan@jedi.com">
+					<div class="errorCorreo d-none"></div>
 				</div>
 
 				<div class="form-group">
@@ -56,39 +50,93 @@
 				<div class="form-group">
 					<label for="mensaje">Ingrese su mensaje:</label>
 					<textarea class="w-100" name="mensaje" rows="5" placeholder="Max: 100 caracteres"></textarea>
+					<div class="errorMensaje d-none"></div>
 				</div>
 
 				<input type="submit" class="btn btn-primary btn-md" value="Enviar">
+
+				<div class="succesMensaje"></div>
 			</form>
 		</div>
 
 
-	<script>
-		const formulario = document.querySelector("form")
+		<script>
+			
+			const formulario = document.querySelector("form")
+			
+			formulario.onsubmit = function(evento){
+				evento.preventDefault()
+				let ahora = new Date()
+				let datos = new FormData(this)
+
+				datos.append("fecha", ahora.valueOf())
+
+				// Enviar datos asincronicamente
+				fetch( this.action, {
+					method: this.method,
+					body: datos
+				} ).then(function(response){
+					return response.json()
+				}).then(function(server){
+					// alert(server.status)
+					console.clear()
+					console.log(server)
+					// console.log(server.msg)
+
+					
+					const errorNombre = document.querySelector(".errorNombre")
+					const inputNombre = document.querySelector("input[name='nombre']")
+					if(server.details[0].context.key == "nombre") {
+						errorNombre.innerHTML = server.details[0].message
+						inputNombre.style.border = '1px solid red'
+						errorNombre.classList.add("d-block")
+						inputCorreo.style.border = '0px solid red'
+						inputMensaje.style.border = '0px solid red'
+					}else{
+						errorNombre.innerHTML = ""
+						inputNombre.style.border = '2px solid green'
+					}
+
+					const errorCorreo = document.querySelector(".errorCorreo")
+					const inputCorreo = document.querySelector("input[name='correo']")
+					if(server.details[0].context.key == "correo") {
+						errorCorreo.innerHTML = server.details[0].message
+						inputCorreo.style.border = '1px solid red'
+						errorCorreo.classList.add("d-block")
+
+						inputMensaje.style.border = '0px solid red'
+					}else{
+						errorCorreo.innerHTML = ""
+						inputCorreo.style.border = '2px solid green'
+					}
+
+					const errorMensaje = document.querySelector(".errorMensaje")
+					const inputMensaje = document.querySelector("textarea[name='mensaje']")
+					if(server.details[0].context.key == "mensaje") {
+						errorMensaje.innerHTML = server.details[0].message
+						inputMensaje.style.border = '1px solid red'
+						errorMensaje.classList.add("d-block")
+						
+					}else{
+						errorMensaje.innerHTML = ""
+						inputMensaje.style.border = '2px solid green'
+						errorMensaje.classList.add("d-none")
+					}
+
+					
+					// const succesMensaje = document.querySelector(".succesMensaje")
+					// if(details == false){
+					// 	succesMensaje.innerHTML = envioerror
+					// }else{
+					// 	succesMensaje.innerHTML = ""
+
+					// }
+
+
+				})
+			}
 		
-		formulario.onsubmit = function(evento){
-			evento.preventDefault()
-			let ahora = new Date()
-			let datos = new FormData(this)
+		</script>
 
-			datos.append("fecha", ahora.valueOf())
-
-			// Enviar datos asincronicamente
-			fetch( this.action, {
-				method: this.method,
-				body: datos
-			} ).then(function(response){
-				return response.json()
-			}).then(function(server){
-				// alert(server.status)
-				console.clear()
-				console.log(server)
-				alert(server.msg)
-				// const error = document.querySelector(".error")
-				// error.innerHTML = server.status
-			})
-		}
-	
-	</script>
 	</body>
 </html>
