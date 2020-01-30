@@ -53,9 +53,14 @@
 					<div class="errorMensaje d-none"></div>
 				</div>
 
-				<input type="submit" class="btn btn-primary btn-md" value="Enviar">
-
-				<div class="succesMensaje"></div>
+				<div class="row">
+					<div class="col-4">
+						<input type="submit" class="btn btn-primary btn-md" value="Enviar">
+					</div>
+					<div class="col-8">
+						<div class="successMensaje" style="margin:7px"></div>
+					</div>
+				</div>
 			</form>
 		</div>
 
@@ -82,6 +87,10 @@
 					console.clear()
 					console.log(server)
 					console.log(server.msg)
+
+					const success = document.querySelector('.successMensaje')
+
+					success.innerHTML = server.msg
 
 				})
 
