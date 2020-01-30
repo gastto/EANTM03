@@ -11,9 +11,10 @@ const hbs = require("nodemailer-express-handlebars")
 	const miniOutlook = nodemailer.createTransport({
 		host: 'smtp.ethereal.email',
 		port: 587,
+		secure: false,
 		auth: {
-			user: 'janie87@ethereal.email',
-			pass: 'vGzVsMnS4gyFF7fZbN'
+			user: 'keon57@ethereal.email',
+			pass: '32Wkgbefzxh6R1TnWU'
 		}
 	})
 	// 2 - Verificar conexión con el servidor de email
@@ -22,19 +23,19 @@ const hbs = require("nodemailer-express-handlebars")
 			console.log("Error:")
 			console.log(error.response)
 		}else{
-			console.log("Recibido")
+			console.log("Recibido" + ok)
 		}
 	})
 
 	// 3 - Asignar motor de plantilla y Conectar con handlebars
 	const render = {
 		viewEngine: {
-			layoutDir: "templates/",
-			partialDir: "templates/",
+			layoutsDir: "templates/templates",
+			partialsDir: "templates/templates",
 			defaultLayout: false,
 			extName: ".hbs"
 		},
-		viewPath: "templates/",
+		viewPath: "templates/templates",
 		extName: ".hbs"
 	}
 	miniOutlook.use('compile', hbs(render));
@@ -88,12 +89,12 @@ server.post("/enviar", (request, response) => {
 		// Envio de mail
 		miniOutlook.sendMail({
 			from: datos.consulta.correo,
-			to: "janie87@ethereal.email",
+			to: "keon57@ethereal.email",
 			subject: datos.consulta.asunto,
 			// html: "<strong>" + datos.consulta.mensaje + "</strong>"
-			template: "templates",
+			template: "templates/templates",
 			context: datos.consulta
-		}, 	function envioerror(error, info){
+		}, 	function(error, info){
 				let msg = error ? 'Su consulta no pudo ser enviada' : 'Gracias por su consulta'
 				response.json({ msg })
 			})

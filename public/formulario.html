@@ -81,60 +81,50 @@
 					// alert(server.status)
 					console.clear()
 					console.log(server)
-					// console.log(server.msg)
-
-					
-					const errorNombre = document.querySelector(".errorNombre")
-					const inputNombre = document.querySelector("input[name='nombre']")
-					if(server.details[0].context.key == "nombre") {
-						errorNombre.innerHTML = server.details[0].message
-						inputNombre.style.border = '1px solid red'
-						errorNombre.classList.add("d-block")
-						inputCorreo.style.border = '0px solid red'
-						inputMensaje.style.border = '0px solid red'
-					}else{
-						errorNombre.innerHTML = ""
-						inputNombre.style.border = '2px solid green'
-					}
-
-					const errorCorreo = document.querySelector(".errorCorreo")
-					const inputCorreo = document.querySelector("input[name='correo']")
-					if(server.details[0].context.key == "correo") {
-						errorCorreo.innerHTML = server.details[0].message
-						inputCorreo.style.border = '1px solid red'
-						errorCorreo.classList.add("d-block")
-
-						inputMensaje.style.border = '0px solid red'
-					}else{
-						errorCorreo.innerHTML = ""
-						inputCorreo.style.border = '2px solid green'
-					}
-
-					const errorMensaje = document.querySelector(".errorMensaje")
-					const inputMensaje = document.querySelector("textarea[name='mensaje']")
-					if(server.details[0].context.key == "mensaje") {
-						errorMensaje.innerHTML = server.details[0].message
-						inputMensaje.style.border = '1px solid red'
-						errorMensaje.classList.add("d-block")
-						
-					}else{
-						errorMensaje.innerHTML = ""
-						inputMensaje.style.border = '2px solid green'
-						errorMensaje.classList.add("d-none")
-					}
-
-					
-					// const succesMensaje = document.querySelector(".succesMensaje")
-					// if(details == false){
-					// 	succesMensaje.innerHTML = envioerror
-					// }else{
-					// 	succesMensaje.innerHTML = ""
-
-					// }
-
+					console.log(server.msg)
 
 				})
+
 			}
+					
+				// 	const errorNombre = document.querySelector(".errorNombre")
+				// 	const inputNombre = document.querySelector("input[name='nombre']")
+				// 	if(server.details[0].context.key == "nombre") {
+				// 		errorNombre.innerHTML = server.details[0].message
+				// 		inputNombre.style.border = '1px solid red'
+				// 		errorNombre.classList.add("d-block")
+				// 	}else{
+				// 		errorNombre.innerHTML = ""
+				// 		inputNombre.style.border = '2px solid green'
+				// 	}
+
+				// 	const errorCorreo = document.querySelector(".errorCorreo")
+				// 	const inputCorreo = document.querySelector("input[name='correo']")
+				// 	if(server.details[0].context.key == "correo") {
+				// 		errorCorreo.innerHTML = server.details[0].message
+				// 		errorCorreo.classList.add("d-block")
+
+				// 		inputMensaje.style.border = '0px solid red'
+				// 	}else{
+				// 		errorCorreo.innerHTML = ""
+				// 		inputCorreo.style.border = '2px solid green'
+				// 	}
+
+				// 	const errorMensaje = document.querySelector(".errorMensaje")
+				// 	const inputMensaje = document.querySelector("textarea[name='mensaje']")
+				// 	if(server.details[0].context.key == "mensaje") {
+				// 		errorMensaje.innerHTML = server.details[0].message
+				// 		inputMensaje.style.border = '1px solid red'
+				// 		errorMensaje.classList.add("d-block")
+						
+				// 	}else{
+				// 		errorMensaje.innerHTML = ""
+				// 		inputMensaje.style.border = '2px solid green'
+				// 		errorMensaje.classList.add("d-none")
+				// 	}
+
+				// })
+			
 		
 		</script>
 
